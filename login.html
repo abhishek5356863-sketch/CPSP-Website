@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#14382f">
+    <title>Sign in | CivicFix</title>
+    <link rel="stylesheet" href="login.css">
+    <script>
+        if (sessionStorage.getItem("civicfix_session")) {
+            window.location.replace("index.html");
+        }
+    </script>
+    <script type="module" src="./login.js"></script>
+</head>
+<body>
+    <main class="auth-shell">
+        <div class="auth-orb auth-orb-a" aria-hidden="true"></div>
+        <div class="auth-orb auth-orb-b" aria-hidden="true"></div>
+
+        <div class="auth-layout">
+            <section class="auth-welcome" aria-label="About CivicFix">
+                <a class="brand" href="login.html" aria-label="CivicFix sign in">
+                    <span class="brand-mark">CF</span>
+                    <span>CivicFix</span>
+                </a>
+                <div class="welcome-copy">
+                    <span class="eyebrow">A better neighborhood starts here</span>
+                    <h1>Small reports.<br><em>Real change.</em></h1>
+                    <p>Report local problems, follow progress, and help your community thrive.</p>
+                </div>
+                <div class="welcome-note">
+                    <span class="note-star" aria-hidden="true">✦</span>
+                    <span><strong>Your community, moving forward</strong><small>One simple place to make a difference.</small></span>
+                </div>
+            </section>
+
+            <section class="auth-card-wrap" aria-label="CivicFix account access">
+                <div class="auth-card">
+                    <div class="card-kicker"><span class="home-glyph" aria-hidden="true">⌂</span><span class="eyebrow">CITIZEN PORTAL</span></div>
+
+                    <section class="auth-panel" id="loginPanel">
+                        <h2>Welcome back</h2>
+                        <p class="panel-subtitle">Sign in to continue helping your community.</p>
+                        <form id="loginForm" novalidate>
+                            <label for="loginEmail">Email address</label>
+                            <input id="loginEmail" name="email" type="email" autocomplete="username" placeholder="you@example.com" required>
+                            <label for="loginPassword">Password</label>
+                            <input id="loginPassword" name="password" type="password" autocomplete="current-password" placeholder="Your password" required>
+                            <p class="form-message" id="loginMessage" role="alert" aria-live="polite"></p>
+                            <button class="submit-button" type="submit">Sign in <span aria-hidden="true">→</span></button>
+                        </form>
+                        <p class="switch-prompt">New to CivicFix? <button type="button" data-panel="registerPanel">Create an account</button></p>
+                        <div class="divider"><span>or</span></div>
+                        <button class="admin-button" type="button" data-panel="adminPanel"><span aria-hidden="true">▣</span> Sign in as an administrator</button>
+                        <p class="switch-prompt society-manager-prompt">Manage a residential community? <button type="button" data-panel="societyManagerPanel">Society manager access</button></p>
+                    </section>
+
+                    <section class="auth-panel is-hidden" id="registerPanel">
+                        <h2>Create your account</h2>
+                        <p class="panel-subtitle">Join your neighbors in making a difference.</p>
+                        <form id="registerForm" novalidate>
+                            <label for="registerName">Full name</label>
+                            <input id="registerName" name="name" type="text" autocomplete="name" placeholder="Your name" required>
+                            <label for="registerEmail">Email address</label>
+                            <input id="registerEmail" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+                            <label for="registerPassword">Create password</label>
+                            <input id="registerPassword" name="password" type="password" autocomplete="new-password" minlength="6" placeholder="At least 6 characters" required>
+                            <label for="confirmPassword">Confirm password</label>
+                            <input id="confirmPassword" name="confirmPassword" type="password" autocomplete="new-password" minlength="6" placeholder="Enter it again" required>
+                            <p class="form-message" id="registerMessage" role="alert" aria-live="polite"></p>
+                            <button class="submit-button" type="submit">Create account <span aria-hidden="true">→</span></button>
+                        </form>
+                        <p class="switch-prompt">Already have an account? <button type="button" data-panel="loginPanel">Sign in</button></p>
+                    </section>
+
+                    <section class="auth-panel is-hidden" id="adminPanel">
+                        <h2>Administrator access</h2>
+                        <p class="panel-subtitle">Sign in to manage community complaints.</p>
+                        <form id="adminForm" novalidate>
+                            <label for="adminUsername">Username</label>
+                            <input id="adminUsername" name="username" type="text" autocomplete="username" placeholder="Admin username" required>
+                            <label for="adminPassword">Password</label>
+                            <input id="adminPassword" name="password" type="password" autocomplete="current-password" placeholder="Admin password" required>
+                            <p class="form-message" id="adminMessage" role="alert" aria-live="polite"></p>
+                            <button class="submit-button" type="submit">Open admin dashboard <span aria-hidden="true">→</span></button>
+                        </form>
+                        <p class="switch-prompt"><button type="button" data-panel="loginPanel">← Back to citizen sign in</button></p>
+                        <p class="demo-note">Demo admin: <strong>admin</strong> / <strong>admin123</strong></p>
+                    </section>
+
+                    <section class="auth-panel is-hidden" id="societyManagerPanel">
+                        <h2>Society manager access</h2>
+                        <p class="panel-subtitle">Sign in with the manager account registered for your society.</p>
+                        <form id="societyManagerLoginForm" novalidate>
+                            <label for="societyManagerEmail">Manager email</label>
+                            <input id="societyManagerEmail" name="email" type="email" autocomplete="username" placeholder="manager@example.com" required>
+                            <label for="societyManagerPassword">Password</label>
+                            <input id="societyManagerPassword" name="password" type="password" autocomplete="current-password" placeholder="Manager password" required>
+                            <p class="form-message" id="societyManagerLoginMessage" role="alert" aria-live="polite"></p>
+                            <button class="submit-button" type="submit">Open society workspace <span aria-hidden="true">→</span></button>
+                        </form>
+                        <p class="switch-prompt">Not registered yet? <button type="button" data-panel="societyRegisterPanel">Register your society</button></p>
+                        <p class="switch-prompt"><button type="button" data-panel="loginPanel">← Back to citizen sign in</button></p>
+                    </section>
+
+                    <section class="auth-panel is-hidden" id="societyRegisterPanel">
+                        <h2>Register a society</h2>
+                        <p class="panel-subtitle">Create the local demo manager account for your community.</p>
+                        <form id="societyRegisterForm" novalidate>
+                            <label for="newSocietyName">Society / community name</label>
+                            <input id="newSocietyName" name="societyName" type="text" autocomplete="organization" placeholder="e.g. Green Valley Apartments" required>
+                            <label for="newSocietyAddress">Society address</label>
+                            <input id="newSocietyAddress" name="societyAddress" type="text" autocomplete="street-address" placeholder="Area, street, city" required>
+                            <label for="newManagerName">Society head / manager name</label>
+                            <input id="newManagerName" name="managerName" type="text" autocomplete="name" placeholder="Manager full name" required>
+                            <label for="newManagerEmail">Manager email</label>
+                            <input id="newManagerEmail" name="email" type="email" autocomplete="email" placeholder="manager@example.com" required>
+                            <label for="newManagerPassword">Create manager password</label>
+                            <input id="newManagerPassword" name="password" type="password" autocomplete="new-password" minlength="6" placeholder="At least 6 characters" required>
+                            <label for="confirmManagerPassword">Confirm password</label>
+                            <input id="confirmManagerPassword" name="confirmPassword" type="password" autocomplete="new-password" minlength="6" placeholder="Enter it again" required>
+                            <p class="form-message" id="societyRegisterMessage" role="alert" aria-live="polite"></p>
+                            <button class="submit-button" type="submit">Register society <span aria-hidden="true">→</span></button>
+                        </form>
+                        <p class="demo-note">Prototype note: society and manager data are stored locally. Real deployments need verified enrollment and server-side access control.</p>
+                        <p class="switch-prompt"><button type="button" data-panel="societyManagerPanel">← Back to manager sign in</button></p>
+                    </section>
+
+                    <p class="privacy-note">Demo accounts are stored in this browser only.</p>
+                </div>
+                <span class="card-back" aria-hidden="true"></span>
+            </section>
+        </div>
+    </main>
+</body>
+</html>

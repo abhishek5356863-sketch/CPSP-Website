@@ -1,0 +1,1397 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CivicFix - Community Issue Reporting</title>
+
+    <script>
+        if (!sessionStorage.getItem("civicfix_session")) {
+            window.location.replace("login.html");
+        }
+    </script>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- ================= ADMIN LOGIN ================= -->
+
+<section id="adminLoginPage" class="admin-page">
+
+    <div class="admin-login-box">
+
+        <div class="admin-logo">
+            🛡️
+        </div>
+
+        <h1>Admin Login</h1>
+
+        <p>Public Grievance Management System</p>
+
+        <form id="adminLoginForm">
+
+            <label>Admin Username</label>
+            <input
+                type="text"
+                id="adminUsername"
+                placeholder="Enter admin username"
+                required
+            >
+
+            <label>Admin Password</label>
+            <input
+                type="password"
+                id="adminPassword"
+                placeholder="Enter admin password"
+                required
+            >
+
+            <button type="submit" class="admin-login-btn">
+                Login to Admin Panel
+            </button>
+
+        </form>
+
+        <p id="adminLoginError" class="admin-error"></p>
+
+        <button onclick="showCitizenPage()" class="back-btn">
+            ← Back to Citizen Login
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- ================= ADMIN DASHBOARD ================= -->
+
+<section id="adminDashboard" class="admin-dashboard">
+
+    <!-- Sidebar -->
+
+    <aside class="admin-sidebar">
+
+        <div class="admin-brand">
+            <div class="admin-brand-logo">CF</div>
+
+            <div>
+                <h2>CivicFix</h2>
+                <span>Admin Panel</span>
+            </div>
+        </div>
+
+        <nav class="admin-menu">
+
+            <button onclick="showAdminSection('dashboard')">
+                📊 Dashboard
+            </button>
+
+            <button onclick="showAdminSection('complaints')">
+                📋 Complaints
+            </button>
+
+            <button onclick="showAdminSection('citizens')">
+                👥 Citizens
+            </button>
+
+            <button onclick="showAdminSection('reports')">
+                📈 Reports
+            </button>
+
+        </nav>
+
+        <button onclick="adminLogout()" class="admin-logout">
+            🚪 Logout
+        </button>
+
+    </aside>
+                        <p>These reports are kept in the government complaint system.</p>
+
+    <!-- Main Admin Content -->
+
+    <main class="admin-main">
+
+        <!-- Top Header -->
+
+        <header class="admin-header">
+
+            <div>
+                <h1>Admin Dashboard</h1>
+                <p>Manage and monitor community complaints</p>
+            </div>
+
+            <div class="admin-profile">
+                <span>🛡️</span>
+                <div>
+                    <strong>Administrator</strong>
+                    <small>Authority</small>
+                </div>
+            </div>
+
+        </header>
+
+
+        <!-- Dashboard Section -->
+
+        <section id="adminDashboardSection" class="admin-section">
+
+            <div class="admin-stats">
+
+                <div class="admin-stat-card">
+                    <div class="stat-icon blue">📋</div>
+                    <div>
+                        <span id="totalComplaints">0</span>
+                        <p>Total Complaints</p>
+                    </div>
+                </div>
+
+                <div class="admin-stat-card">
+                    <div class="stat-icon orange">⏳</div>
+                    <div>
+                        <span id="pendingComplaints">0</span>
+                        <p>Reported</p>
+                    </div>
+                </div>
+
+                <div class="admin-stat-card">
+                    <div class="stat-icon yellow">🔧</div>
+                    <div>
+                        <span id="progressComplaints">0</span>
+                        <p>In Progress</p>
+                    </div>
+                </div>
+
+                <div class="admin-stat-card">
+                    <div class="stat-icon green">✓</div>
+                    <div>
+                        <span id="resolvedComplaints">0</span>
+                        <p>Resolved</p>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- Recent complaints -->
+
+            <div class="admin-card">
+
+                <div class="card-heading">
+
+                    <div>
+                        <h2>Recent Complaints</h2>
+                        <p>Latest reports submitted by citizens</p>
+                    </div>
+
+                    <button
+                        onclick="showAdminSection('complaints')"
+                        class="view-all-btn">
+                        View All
+                    </button>
+
+                </div>
+
+                <div id="recentComplaints">
+                    <!-- Complaints will appear here -->
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Complaints Section -->
+
+        <section
+            id="adminComplaintsSection"
+            class="admin-section hidden">
+
+            <div class="admin-card">
+
+                <div class="card-heading">
+
+                    <div>
+                        <h2>All Complaints</h2>
+                        <p>Manage citizen complaints</p>
+                    </div>
+
+                    <select id="adminStatusFilter">
+                        <option value="All">All Status</option>
+                        <option value="Reported">Reported</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Resolved">Resolved</option>
+                    </select>
+
+                </div>
+
+                <input
+                    type="text"
+                    id="adminSearch"
+                    class="admin-search"
+                    placeholder="Search complaint, category or location..."
+                >
+
+                <div id="allComplaints">
+                    <!-- Complaints appear here -->
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Citizens Section -->
+
+        <section
+            id="adminCitizensSection"
+            class="admin-section hidden">
+
+            <div class="admin-card">
+
+                <h2>Registered Citizens</h2>
+
+                <p class="section-description">
+                    Citizens registered in the CivicFix system.
+                </p>
+
+                <div id="citizensList">
+                    <!-- Citizens appear here -->
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Reports Section -->
+
+        <section
+            id="adminReportsSection"
+            class="admin-section hidden">
+
+            <div class="admin-card">
+
+                <h2>Complaint Reports</h2>
+
+                <p class="section-description">
+                    Overview of complaint resolution.
+                </p>
+
+                <div class="report-box">
+
+                    <div>
+                        <strong id="reportTotal">0</strong>
+                        <span>Total Reports</span>
+                    </div>
+
+                    <div>
+                        <strong id="reportResolved">0</strong>
+                        <span>Resolved</span>
+                    </div>
+
+                    <div>
+                        <strong id="reportPending">0</strong>
+                        <span>Pending</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</section>
+
+    <!-- ================= HEADER ================= -->
+
+    <header class="topbar">
+
+        <div class="brand">
+
+            <div class="logo">
+                CF
+            </div>
+
+            <div>
+                <h1>CivicFix</h1>
+
+                <p>
+                    Public Grievance & Civic Issue Reporting
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="topbar-controls">
+            <div id="liquid-nav-root"></div>
+            <button class="nav-btn signout-button" type="button" data-signout>
+                Sign out
+            </button>
+        </div>
+
+        <nav class="legacy-nav" aria-label="Legacy navigation" hidden>
+            <button
+                class="nav-btn active"
+                data-view="home">
+                Home
+            </button>
+
+            <button
+                class="nav-btn"
+                data-view="report">
+                Report Issue
+            </button>
+
+            <button
+                class="nav-btn"
+                data-view="track">
+                My Complaints
+            </button>
+
+            <button
+                class="nav-btn"
+                data-view="admin">
+                Admin Dashboard
+            </button>
+
+            <button class="nav-btn" data-view="societyManager" hidden>
+                Society Manager
+            </button>
+        </nav>
+
+    </header>
+
+
+    <!-- ================= MAIN CONTENT ================= -->
+
+    <main class="container">
+
+
+        <!-- ================= HOME PAGE ================= -->
+
+        <section
+            id="home"
+            class="view active">
+
+            <div class="hero">
+
+                <div>
+
+                    <span class="badge">
+                        Community Project
+                    </span>
+
+                    <h2>
+                        Report a problem.
+                        <span class="hero-title-accent">Improve your community.</span>
+                    </h2>
+
+                    <p>
+                        Report garbage, damaged roads,
+                        streetlight failures, water leakage
+                        and sanitation problems with a photo
+                        and location.
+                    </p>
+
+                    <button
+                        class="primary"
+                        data-go="report">
+
+                        Report an Issue
+
+                    </button>
+
+                </div>
+
+
+                <div class="hero-card">
+
+                    <div class="hero-icon">
+                        <svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+                            <path d="M8 54V27l15-9v36M23 54V10l18 8v36M41 54V29l15-8v33M4 54h56" />
+                            <path d="M14 29h3m-3 7h3m-3 7h3m12-24h4m-4 8h4m-4 8h4m-4 8h4m13-8h3m-3 7h3" />
+                        </svg>
+                    </div>
+
+                    <h3>
+                        One platform for civic complaints
+                    </h3>
+
+                    <p>
+                        Track every complaint from
+                        <b>Reported</b> to
+                        <b>In Progress</b> to
+                        <b>Resolved</b>.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <section class="report-type-picker" aria-labelledby="reportTypeTitle">
+                <div class="issue-picker-heading">
+                    <span class="badge">Choose a service</span>
+                    <h3 id="reportTypeTitle">Where does the problem belong?</h3>
+                    <p>Public infrastructure reports go to government services. Building and shared-space issues go to your society manager.</p>
+                </div>
+                <div class="report-type-grid">
+                    <button class="report-type-card" type="button" data-report-type="government">
+                        <span class="report-type-icon" aria-hidden="true"><svg viewBox="0 0 48 48" focusable="false"><path d="M5 17 24 7l19 10M8 40h32M11 18v20m9-20v20m8-20v20m9-20v20M6 44h36"/></svg></span>
+                        <strong>Government problem</strong>
+                        <small>Roads, public lighting, garbage, drainage and other civic services</small>
+                        <span class="report-type-action">Browse public issues <b>→</b></span>
+                    </button>
+                    <button class="report-type-card" type="button" data-report-type="society">
+                        <span class="report-type-icon" aria-hidden="true"><svg viewBox="0 0 48 48" focusable="false"><path d="m5 22 19-16 19 16M10 20v22h28V20M19 42V28h10v14M16 22h.1m16-.1h.1"/></svg></span>
+                        <strong>Society problem</strong>
+                        <small>Water, lifts, security, parking and shared facilities in your community</small>
+                        <span class="report-type-action">Choose my society <b>→</b></span>
+                    </button>
+                </div>
+            </section>
+
+            <div id="governmentIssuesPanel" class="issue-picker hidden" aria-labelledby="issuePickerTitle">
+                <div class="issue-picker-heading">
+                    <div>
+                        <button class="text-back-button" type="button" data-report-type="back">← Change report type</button>
+                        <span class="badge">Public services</span>
+                        <h3 id="issuePickerTitle">What needs attention?</h3>
+                        <p>These reports are kept in the government complaint system.</p>
+                    </div>
+                </div>
+                <div class="issue-picker-grid">
+                    <button class="issue-choice" type="button" data-category="Garbage / Waste">
+                        <span><svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M14 15h20l-2 25H16l-2-25Zm-3-5h26m-17 0V7h8v3m-9 10 1 17m8-17-1 17"/><path d="m9 8 3-5 5 1m19 4-3-5-5 1"/></svg></span>
+                        <strong>Garbage &amp; waste</strong><small>Overflowing bins or litter</small>
+                    </button>
+                    <button class="issue-choice" type="button" data-category="Damaged Road">
+                        <span><svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M14 5 8 43m26-38 6 38M24 7v7m0 7v7m0 7v7"/><path d="m18 29 4-4 4 3 4-5"/></svg></span>
+                        <strong>Road damage</strong><small>Potholes and unsafe roads</small>
+                    </button>
+                    <button class="issue-choice" type="button" data-category="Streetlight">
+                        <span><svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M16 20a9 9 0 1 1 16 5.7c-1.7 1.9-2.5 3.3-2.7 5.3h-10.6c-.2-2-1-3.4-2.7-5.3A8.9 8.9 0 0 1 16 20Z"/><path d="M19 35h10m-9 4h8M24 2v4m16 14h-4M12 20H8m27-11-3 3M16 9l3 3"/></svg></span>
+                        <strong>Streetlights</strong><small>Lights out or damaged</small>
+                    </button>
+                    <button class="issue-choice" type="button" data-category="Water Leakage">
+                        <span><svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M24 5S12 19 12 28a12 12 0 0 0 24 0C36 19 24 5 24 5Z"/><path d="M18 29a6 6 0 0 0 6 6"/></svg></span>
+                        <strong>Water leakage</strong><small>Leaks and water issues</small>
+                    </button>
+                    <button class="issue-choice" type="button" data-category="Drainage / Sanitation">
+                        <span><svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M7 15h34v23H7zM7 22h34M7 30h34M15 15v23m9-23v23m9-23v23"/><path d="M24 4v7m-4-4 4 4 4-4"/></svg></span>
+                        <strong>Drainage &amp; sanitation</strong><small>Blocked drains or sanitation</small>
+                    </button>
+                    <button class="issue-choice" type="button" data-category="Other">
+                        <span><svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><circle cx="24" cy="24" r="17"/><path d="M24 15v18m-9-9h18"/></svg></span>
+                        <strong>Something else</strong><small>Report another local issue</small>
+                    </button>
+                </div>
+            </div>
+
+            <section id="societyIssuesPanel" class="society-issues-panel hidden" aria-labelledby="societyIssueTitle">
+                <div class="issue-picker-heading">
+                    <button class="text-back-button" type="button" data-report-type="back">← Change report type</button>
+                    <span class="badge">Private community services</span>
+                    <h3 id="societyIssueTitle">Choose your society</h3>
+                    <p>Society reports are visible only to the selected society's manager and its reporting resident.</p>
+                </div>
+                <label class="society-select-label" for="residentSocietySelect">My society</label>
+                <select id="residentSocietySelect" class="society-select">
+                    <option value="">Choose your registered society</option>
+                </select>
+                <div id="societyCategoryGrid" class="issue-picker-grid society-category-grid"></div>
+                <p id="societyEmptyMessage" class="empty society-empty hidden">
+                    No societies are registered yet. Ask your society head or manager to register through the Society Manager link on the login page.
+                </p>
+            </section>
+
+
+            <!-- Statistics -->
+
+            <div class="stats">
+
+                <div class="stat-card">
+
+                    <span id="totalCount">
+                        0
+                    </span>
+
+                    <small>
+                        Total Reports
+                    </small>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <span id="progressCount">
+                        0
+                    </span>
+
+                    <small>
+                        In Progress
+                    </small>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <span id="resolvedCount">
+                        0
+                    </span>
+
+                    <small>
+                        Resolved
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <!-- Features -->
+
+            <div class="info-grid">
+
+                <article>
+
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M7 15h8l3-4h12l3 4h8v25H7z"/><circle cx="24" cy="27" r="8"/><circle cx="24" cy="27" r="3"/><path d="M35 20h3"/></svg>
+                    </div>
+
+                    <h3>
+                        Photo Evidence
+                    </h3>
+
+                    <p>
+                        Attach a photo to clearly
+                        show the civic problem.
+                    </p>
+
+                </article>
+
+
+                <article>
+
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M38 20c0 11-14 23-14 23S10 31 10 20a14 14 0 1 1 28 0Z"/><circle cx="24" cy="20" r="5"/></svg>
+                    </div>
+
+                    <h3>
+                        Location
+                    </h3>
+
+                    <p>
+                        Use GPS or enter a location
+                        manually.
+                    </p>
+
+                </article>
+
+
+                <article>
+
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M7 40h35M10 37V25h7v12m7 0V15h7v22m7 0V8h7v29"/><path d="m9 18 9-7 8 2 12-9"/></svg>
+                    </div>
+
+                    <h3>
+                        Status Tracking
+                    </h3>
+
+                    <p>
+                        See whether your complaint is
+                        reported, in progress or resolved.
+                    </p>
+
+                </article>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ================= REPORT ISSUE PAGE ================= -->
+
+        <section
+            id="report"
+            class="view">
+
+            <div class="section-heading">
+
+                <span class="badge">
+                    Citizen Portal
+                </span>
+
+                <h2>
+                    Report a Civic Issue
+                </h2>
+
+                <p>
+                    Enter the details below.
+                    For a classroom demo, reports are
+                    stored in your browser.
+                </p>
+
+            </div>
+
+
+            <form
+                id="issueForm"
+                class="form-card">
+
+
+                <!-- Name, Email, Category, Location -->
+
+                <div class="form-grid">
+
+
+                    <label>
+
+                        Full Name
+
+                        <input
+                            id="name"
+                            required
+                            placeholder="Enter your name">
+
+                    </label>
+
+
+                    <label>
+
+                        Email
+
+                        <input
+                            id="email"
+                            type="email"
+                            required
+                            placeholder="name@example.com">
+
+                    </label>
+
+
+                    <label>
+
+                        Issue Category
+
+                        <select
+                            id="category"
+                            required>
+
+                            <option value="">
+                                Select category
+                            </option>
+
+                            <option>
+                                Garbage / Waste
+                            </option>
+
+                            <option>
+                                Damaged Road
+                            </option>
+
+                            <option>
+                                Streetlight
+                            </option>
+
+                            <option>
+                                Water Leakage
+                            </option>
+
+                            <option>
+                                Drainage / Sanitation
+                            </option>
+
+                            <option>
+                                Other
+                            </option>
+
+                        </select>
+
+                    </label>
+
+
+                    <label>
+
+                        Location
+
+                        <input
+                            id="location"
+                            required
+                            placeholder="Area / street / landmark">
+
+                    </label>
+
+                    <div id="societyReportDetails" class="society-report-details hidden">
+                        <label>
+                            Building / block
+                            <input id="societyBuilding" placeholder="e.g. Block A">
+                        </label>
+                        <label>
+                            Floor / unit (optional)
+                            <input id="societyUnit" placeholder="e.g. Floor 3, Flat 302">
+                        </label>
+                    </div>
+
+                </div>
+
+
+                <!-- Description -->
+
+                <label>
+
+                    Problem Description
+
+                    <textarea
+                        id="description"
+                        rows="5"
+                        required
+                        placeholder="Describe the problem...">
+                    </textarea>
+
+                </label>
+
+
+                <!-- GPS -->
+
+                <div class="location-row">
+
+                    <button
+                        type="button"
+                        class="secondary"
+                        id="gpsBtn">
+
+                        <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 10c0 5.5-8 12-8 12S4 15.5 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/><path d="M12 1v2m11 7h-2M3 10H1m11 13v-2"/></svg>
+                        Use My Current Location
+
+                    </button>
+
+                    <span id="gpsStatus">
+                        GPS not selected
+                    </span>
+
+                </div>
+
+                <div id="locationMapPanel" class="location-map-panel hidden">
+                    <div class="map-panel-heading">
+                        <div>
+                            <strong>Confirm the reported location</strong>
+                            <p id="mapAddressStatus" aria-live="polite">Getting your current location…</p>
+                        </div>
+                        <span id="mapProviderBadge" class="map-provider-badge">Map</span>
+                    </div>
+
+                    <div id="locationMap" class="location-map" role="application" aria-label="Interactive location map"></div>
+
+                    <div class="map-confirm-row">
+                        <p id="mapCoordinates" class="map-coordinates">Coordinates will appear here.</p>
+                        <button id="confirmLocationBtn" class="primary" type="button" disabled>
+                            Confirm Location
+                        </button>
+                    </div>
+                    <p id="mapHelp" class="map-help">Drag the pin or click the map to adjust the location.</p>
+                </div>
+
+                <input id="locationLatitude" type="hidden" name="latitude">
+                <input id="locationLongitude" type="hidden" name="longitude">
+                <input id="locationConfirmed" type="hidden" name="locationConfirmed" value="false">
+                <input id="complaintType" type="hidden" name="complaintType" value="government">
+                <input id="complaintSocietyId" type="hidden" name="societyId" value="">
+                <p id="locationValidation" class="location-validation" role="alert" aria-live="polite"></p>
+
+
+                <!-- Photo -->
+
+                <label>
+
+                    Upload Photo
+
+                    <input
+                        id="photo"
+                        type="file"
+                        accept="image/*">
+
+                </label>
+
+
+                <!-- Image Preview -->
+
+                <img
+                    id="preview"
+                    class="preview hidden"
+                    alt="Selected issue preview">
+
+
+                <!-- Submit -->
+
+                <button
+                    class="primary"
+                    type="submit">
+
+                    Submit Complaint
+
+                </button>
+
+            </form>
+
+        </section>
+
+
+
+        <!-- ================= TRACK COMPLAINTS ================= -->
+
+        <section
+            id="track"
+            class="view">
+
+            <div class="section-heading">
+
+                <span class="badge">
+                    Citizen Portal
+                </span>
+
+                <h2>
+                    My Complaints
+                </h2>
+
+                <p>
+                    Track complaints saved from this browser.
+                </p>
+
+            </div>
+
+
+            <div
+                id="complaintsList"
+                class="complaints">
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ================= ADMIN DASHBOARD ================= -->
+
+        <section
+            id="admin"
+            class="view">
+
+            <div class="section-heading">
+
+                <span class="badge">
+                    Authority Portal
+                </span>
+
+                <h2>
+                    Admin Dashboard
+                </h2>
+
+                <p>
+                    For the project demo, the admin can
+                    update complaint status.
+                </p>
+
+            </div>
+
+
+            <!-- Search and Filter -->
+
+            <div class="admin-toolbar">
+
+                <input
+                    id="adminSearch"
+                    placeholder="Search by category, location or name">
+
+
+                <select id="adminFilter">
+
+                    <option value="All">
+                        All Status
+                    </option>
+
+                    <option value="Reported">
+                        Reported
+                    </option>
+
+                    <option value="In Progress">
+                        In Progress
+                    </option>
+
+                    <option value="Resolved">
+                        Resolved
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- Complaints -->
+
+            <div
+                id="adminList"
+                class="admin-list">
+
+            </div>
+
+            <section class="admin-card society-approval-card" aria-labelledby="societyApprovalTitle">
+                <div>
+                    <span class="badge">Community onboarding</span>
+                    <h3 id="societyApprovalTitle">Society verification requests</h3>
+                    <p>Review new community registrations before residents can file private society reports.</p>
+                </div>
+                <div id="societyApprovalList" class="society-approval-list"></div>
+            </section>
+
+        </section>
+
+        <section id="societyManager" class="view">
+            <div class="section-heading">
+                <span class="badge">Private society workspace</span>
+                <h2 id="societyManagerTitle">Society Manager</h2>
+                <p id="societyManagerSubtitle">Review and manage complaints for your society only.</p>
+            </div>
+            <div class="society-manager-stats">
+                <article class="stat-card"><span id="societyTotalCount">0</span><small>Total reports</small></article>
+                <article class="stat-card"><span id="societyOpenCount">0</span><small>Needs attention</small></article>
+                <article class="stat-card"><span id="societyResolvedCount">0</span><small>Resolved</small></article>
+            </div>
+            <div class="admin-toolbar society-manager-toolbar">
+                <input id="societyManagerSearch" type="search" placeholder="Search by issue, resident, or building">
+                <select id="societyManagerFilter" aria-label="Filter society complaints by status">
+                    <option value="All">All statuses</option>
+                    <option value="Reported">Reported</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Resolved">Resolved</option>
+                </select>
+            </div>
+            <div id="societyManagerList" class="admin-list"></div>
+        </section>
+
+    </main>
+
+
+
+    <!-- ================= TOAST MESSAGE ================= -->
+
+    <div
+        id="toast"
+        class="toast">
+
+    </div>
+
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <div id="doodle-footer-root"></div>
+    <!-- ================= ADMIN LOGIN ================= -->
+
+<section id="adminLoginPage" class="admin-login-page">
+
+    <div class="admin-login-card">
+
+        <div class="admin-icon">
+            🛡️
+        </div>
+
+        <h1>Admin Login</h1>
+
+        <p>Citizen Complaint Management System</p>
+
+        <form id="adminLoginForm">
+
+            <label for="adminUsername">
+                Username
+            </label>
+
+            <input
+                type="text"
+                id="adminUsername"
+                placeholder="Enter username"
+                required
+            >
+
+            <label for="adminPassword">
+                Password
+            </label>
+
+            <input
+                type="password"
+                id="adminPassword"
+                placeholder="Enter password"
+                required
+            >
+
+            <button type="submit">
+                Login as Admin
+            </button>
+
+        </form>
+
+        <p id="adminLoginMessage"></p>
+
+        <button
+            type="button"
+            class="back-citizen"
+            onclick="backToCitizen()"
+        >
+            ← Back to Citizen Portal
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- ================= ADMIN DASHBOARD ================= -->
+
+<section id="adminDashboard" class="admin-dashboard">
+
+    <!-- SIDEBAR -->
+
+    <aside class="admin-sidebar">
+
+        <div class="admin-logo">
+
+            <div class="logo-box">
+                CF
+            </div>
+
+            <div>
+                <h2>CivicFix</h2>
+                <span>Admin Portal</span>
+            </div>
+
+        </div>
+
+
+        <nav class="admin-navigation">
+
+            <button onclick="showAdminSection('dashboard')">
+                📊 Dashboard
+            </button>
+
+            <button onclick="showAdminSection('complaints')">
+                📋 Complaints
+            </button>
+
+            <button onclick="showAdminSection('citizens')">
+                👥 Citizens
+            </button>
+
+            <button onclick="showAdminSection('reports')">
+                📈 Reports
+            </button>
+
+        </nav>
+
+
+        <button
+            class="admin-logout"
+            onclick="adminLogout()"
+        >
+            🚪 Logout
+        </button>
+
+    </aside>
+
+
+    <!-- MAIN AREA -->
+
+    <main class="admin-main">
+
+        <!-- HEADER -->
+
+        <header class="admin-header">
+
+            <div>
+
+                <h1>Admin Dashboard</h1>
+
+                <p>
+                    Manage community complaints
+                    and citizen reports.
+                </p>
+
+            </div>
+
+            <div class="admin-user">
+
+                <span>🛡️</span>
+
+                <div>
+                    <strong>Administrator</strong>
+                    <small>Authority</small>
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- ================= DASHBOARD ================= -->
+
+        <section
+            id="adminDashboardSection"
+            class="admin-section"
+        >
+
+            <div class="admin-stat-container">
+
+                <div class="admin-stat">
+
+                    <span class="stat-number"
+                          id="totalComplaints">
+                        0
+                    </span>
+
+                    <span class="stat-title">
+                        Total Complaints
+                    </span>
+
+                </div>
+
+
+                <div class="admin-stat">
+
+                    <span class="stat-number"
+                          id="reportedComplaints">
+                        0
+                    </span>
+
+                    <span class="stat-title">
+                        Reported
+                    </span>
+
+                </div>
+
+
+                <div class="admin-stat">
+
+                    <span class="stat-number"
+                          id="progressComplaints">
+                        0
+                    </span>
+
+                    <span class="stat-title">
+                        In Progress
+                    </span>
+
+                </div>
+
+
+                <div class="admin-stat">
+
+                    <span class="stat-number"
+                          id="resolvedComplaints">
+                        0
+                    </span>
+
+                    <span class="stat-title">
+                        Resolved
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="admin-card">
+
+                <h2>Recent Complaints</h2>
+
+                <p>
+                    Latest complaints submitted
+                    by citizens.
+                </p>
+
+                <div id="recentComplaints">
+
+                    <p class="empty-message">
+                        No complaints available.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= COMPLAINTS ================= -->
+
+        <section
+            id="adminComplaintsSection"
+            class="admin-section admin-hidden"
+        >
+
+            <div class="admin-card">
+
+                <div class="section-heading">
+
+                    <div>
+
+                        <h2>All Complaints</h2>
+
+                        <p>
+                            Review and update citizen
+                            complaints.
+                        </p>
+
+                    </div>
+
+                    <select
+                        id="complaintFilter"
+                        onchange="loadAdminComplaints()"
+                    >
+
+                        <option value="All">
+                            All
+                        </option>
+
+                        <option value="Reported">
+                            Reported
+                        </option>
+
+                        <option value="In Progress">
+                            In Progress
+                        </option>
+
+                        <option value="Resolved">
+                            Resolved
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <input
+                    type="text"
+                    id="complaintSearch"
+                    class="complaint-search"
+                    placeholder="Search complaints..."
+                    oninput="loadAdminComplaints()"
+                >
+
+
+                <div id="allComplaints">
+
+                    <p class="empty-message">
+                        No complaints available.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= CITIZENS ================= -->
+
+        <section
+            id="adminCitizensSection"
+            class="admin-section admin-hidden"
+        >
+
+            <div class="admin-card">
+
+                <h2>Registered Citizens</h2>
+
+                <p>
+                    Citizens registered in CivicFix.
+                </p>
+
+                <div id="citizenList">
+
+                    <p class="empty-message">
+                        No citizens registered.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= REPORTS ================= -->
+
+        <section
+            id="adminReportsSection"
+            class="admin-section admin-hidden"
+        >
+
+            <div class="admin-card">
+
+                <h2>Complaint Reports</h2>
+
+                <p>
+                    Complaint resolution statistics.
+                </p>
+
+
+                <div class="report-container">
+
+                    <div>
+                        <strong id="reportTotal">
+                            0
+                        </strong>
+
+                        <span>
+                            Total
+                        </span>
+                    </div>
+
+
+                    <div>
+                        <strong id="reportResolved">
+                            0
+                        </strong>
+
+                        <span>
+                            Resolved
+                        </span>
+                    </div>
+
+
+                    <div>
+                        <strong id="reportPending">
+                            0
+                        </strong>
+
+                        <span>
+                            Pending
+                        </span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</section>
+
+    <script src="demo-societies.js"></script>
+    <script src="maps-config.js"></script>
+    <script src="script.js"></script>
+    <script type="module" src="/src/main.tsx"></script>
+</body>
+
+</html>

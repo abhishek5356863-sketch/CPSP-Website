@@ -1,0 +1,50 @@
+/*
+ * Fictional demo entries for each Indian state and union territory.
+ * Replace these sample records with verified real communities in a live deployment.
+ */
+window.CIVICFIX_DEMO_SOCIETIES = [
+    { id: "demo-andhra-pradesh", state: "Andhra Pradesh", region: "Visakhapatnam" },
+    { id: "demo-arunachal-pradesh", state: "Arunachal Pradesh", region: "Itanagar" },
+    { id: "demo-assam", state: "Assam", region: "Guwahati" },
+    { id: "demo-bihar", state: "Bihar", region: "Patna" },
+    { id: "demo-chhattisgarh", state: "Chhattisgarh", region: "Raipur" },
+    { id: "demo-goa", state: "Goa", region: "Panaji" },
+    { id: "demo-gujarat", state: "Gujarat", region: "Ahmedabad" },
+    { id: "demo-haryana", state: "Haryana", region: "Gurugram" },
+    { id: "demo-himachal-pradesh", state: "Himachal Pradesh", region: "Shimla" },
+    { id: "demo-jharkhand", state: "Jharkhand", region: "Ranchi" },
+    { id: "demo-karnataka", state: "Karnataka", region: "Bengaluru" },
+    { id: "demo-kerala", state: "Kerala", region: "Kochi" },
+    { id: "demo-madhya-pradesh", state: "Madhya Pradesh", region: "Bhopal" },
+    { id: "demo-maharashtra", state: "Maharashtra", region: "Mumbai" },
+    { id: "demo-manipur", state: "Manipur", region: "Imphal" },
+    { id: "demo-meghalaya", state: "Meghalaya", region: "Shillong" },
+    { id: "demo-mizoram", state: "Mizoram", region: "Aizawl" },
+    { id: "demo-nagaland", state: "Nagaland", region: "Kohima" },
+    { id: "demo-odisha", state: "Odisha", region: "Bhubaneswar" },
+    { id: "demo-punjab", state: "Punjab", region: "Ludhiana" },
+    { id: "demo-rajasthan", state: "Rajasthan", region: "Jaipur" },
+    { id: "demo-sikkim", state: "Sikkim", region: "Gangtok" },
+    { id: "demo-tamil-nadu", state: "Tamil Nadu", region: "Chennai" },
+    { id: "demo-telangana", state: "Telangana", region: "Hyderabad" },
+    { id: "demo-tripura", state: "Tripura", region: "Agartala" },
+    { id: "demo-uttar-pradesh", state: "Uttar Pradesh", region: "Lucknow" },
+    { id: "demo-uttarakhand", state: "Uttarakhand", region: "Dehradun" },
+    { id: "demo-west-bengal", state: "West Bengal", region: "Kolkata" },
+    { id: "demo-andaman-nicobar", state: "Andaman and Nicobar Islands", region: "Port Blair" },
+    { id: "demo-chandigarh", state: "Chandigarh", region: "Chandigarh" },
+    { id: "demo-dadra-nagar-haveli-daman-diu", state: "Dadra and Nagar Haveli and Daman and Diu", region: "Daman" },
+    { id: "demo-delhi", state: "Delhi", region: "New Delhi" },
+    { id: "demo-jammu-kashmir", state: "Jammu and Kashmir", region: "Srinagar" },
+    { id: "demo-ladakh", state: "Ladakh", region: "Leh" },
+    { id: "demo-lakshadweep", state: "Lakshadweep", region: "Kavaratti" },
+    { id: "demo-puducherry", state: "Puducherry", region: "Puducherry" }
+].map(({ id, state, region }) => ({
+    id,
+    state,
+    name: `CivicFix Sample Residents Association — ${state}`,
+    address: `${region}, ${state}, India`,
+    managerEmail: "",
+    status: "Verified",
+    isDemo: true
+}));
